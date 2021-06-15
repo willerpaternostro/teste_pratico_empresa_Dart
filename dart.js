@@ -2,6 +2,7 @@
     // primeiro - número que começa a contagem. Precisa ser inteiro e menor ou igual ao segundo parâmetro
     // segundo - número que termina a contagem
     // retirarEspaço - valor 'true' não conta os espaços em branco
+//Resposta:  1 a 1000 são 22894 caracteres (contando espaço em branco) e 19672 letras sem espaço em branco.
 function contadorLetras(primeiro,segundo, retirarEspaco = false){
     let validacao = validandoParametros(primeiro,segundo)
     if(validacao.erro) return validacao.erroDescricao;
