@@ -96,3 +96,30 @@ function contadorLetras(primeiro,segundo, retirarEspaco = false){
     console.log(contador +' CARACTERES');
     //return contador;
 }
+
+function requisicao(metodo, url, data = null){
+    let method = metodo.toUpperCase()
+    //let response = null
+
+    if(method == 'GET' || method == 'POST'){
+        let xhr = new XMLHttpRequest();
+        xhr.open(method,url,true);
+
+        if(method === 'POST')xhr.setRequestHeader('Content-Type','application/json');
+        
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState == 4){
+                if(xhr.status == 200){ // tratar 404, 403 ?
+                    console.log(xhr.responseText);
+                    //response = JSON.parse(xhr.responseText)
+                    //console.log('Qtde repositorios:'+ response.length);
+                }else{
+                    //console.log('Erro: ' + xhr.responseText);
+                }
+            }
+        }
+        xhr.send(data);
+    }else{
+        alert('Este método não é permitido. Apenas GET e POST')
+    }
+}
