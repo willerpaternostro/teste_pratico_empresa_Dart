@@ -1,10 +1,16 @@
+/* PARÂMETROS */
+    // primeiro - número que começa a contagem. Precisa ser inteiro e menor ou igual ao segundo parâmetro
+    // segundo - número que termina a contagem
+    // retirarEspaço - valor 'true' não conta os espaços em branco
 function contadorLetras(primeiro,segundo, retirarEspaco = false){
+    let validacao = validandoParametros(primeiro,segundo)
+    if(validacao.erro) return validacao.erroDescricao;
 
     let contador = 0;
     let complemento = ' E '
 
     const unidades = {0:'ZERO', 1:'UM', 2:'DOIS', 3:'TRES', 4:'QUATRO', 5:'CINCO', 6:'SEIS', 7:'SETE', 8:'OITO', 9:'NOVE'};
-    const unicosDezena = {0:'DEZ', 1:'ONZE', 2:'DOZE', 3:'TREZE', 4:'QUATORZE', 5:'QUINZE', 6:'DEZESSEIS', 7:'DEZESSETE', 8:'DEZOITO', 9:'DEZENOVE'}; //Não repetem em dezenas
+    const unicosDezena = {0:'DEZ', 1:'ONZE', 2:'DOZE', 3:'TREZE', 4:'QUATORZE', 5:'QUINZE', 6:'DEZESSEIS', 7:'DEZESSETE', 8:'DEZOITO', 9:'DEZENOVE'}; //Não repetem em dezenas, apenas em centenas a diante
     const dezenas = {0:'', 1:unicosDezena, 2:'VINTE', 3:'TRINTA', 4:'QUARENTA', 5:'CINQUENTA', 6:'SESSENTA', 7:'SETENTA', 8:'OITENTA', 9:'NOVENTA'};
     const centenas = {0:'', 1:'CENTO', 2:'DUZENTOS', 3:'TREZENTOS', 4:'QUATROCENTOS', 5:'QUINHENTOS', 6:'SEISCENTOS', 7:'SETECENTOS', 8:'OITOCENTOS', 9:'NOVECENTOS'};
     
@@ -12,7 +18,7 @@ function contadorLetras(primeiro,segundo, retirarEspaco = false){
         if(i < 10){
             let posicao = Object.keys(unidades).findIndex(element => {return element == i});
             contador += unidades[posicao].length
-            console.log(i+': '+ unidades[posicao]);
+            //console.log(i+': '+ unidades[posicao]);
             continue;
         }
       
@@ -44,9 +50,8 @@ function contadorLetras(primeiro,segundo, retirarEspaco = false){
             if(auxiliarUnidade != 0 && auxiliarDezena != 1)
                 nomeNumero = dezenas[posicaoDezena] +complemento+ unidades[posicaoUnidade]
            
-            console.log(i + ': ' + nomeNumero);
-
-            retirarEspaco?contador += nomeNumero.replace(/\s+/g,"").length:contador += nomeNumero.length
+            //console.log(i + ': ' + nomeNumero); // Listagem dos números
+            retirarEspaco?contador += nomeNumero.replace(/\s+/g,"").length : contador += nomeNumero.length
             
             continue;
         }
@@ -70,7 +75,6 @@ function contadorLetras(primeiro,segundo, retirarEspaco = false){
             //console.log('Posicao dezena: '+posicaoUnidade);
             let posicaoCentena = Object.keys(centenas).findIndex(element => {return element == auxiliarCentena});
             //console.log('Posicao centena: '+posicaoCentena);
-           
 
             let nomeNumero =''
             if(auxiliarDezena === 0 || auxiliarDezena === 1){
@@ -86,17 +90,40 @@ function contadorLetras(primeiro,segundo, retirarEspaco = false){
                 else 
                     nomeNumero = centenas[posicaoCentena]+ complemento + dezenas[posicaoDezena] + complemento+ unidades[posicaoUnidade];
             } 
-            console.log(i+': ' +nomeNumero);
-
+            //console.log(i+': ' +nomeNumero);
             retirarEspaco?contador += nomeNumero.replace(/\s+/g,"").length:contador += nomeNumero.length
             
             continue;
         }
     }
-    console.log(contador +' CARACTERES');
-    //return contador;
+    //console.log(contador +' CARACTERES');
+    return contador;
 }
-
+function validandoParametros(primeiro,segundo){
+    let retornoErro = {
+        erro:true,
+        erroDescricao:"Parâmetros inválidos. Precisam ser números inteiros."
+    }
+    if(!(Number.isNaN(primeiro) && Number.isNaN(segundo))
+    ){
+        if(Number.isInteger(primeiro) && Number.isInteger(segundo)){
+            if(primeiro <= segundo){
+                retornoErro.erro = false
+                retornoErro.erroDescricao = ''
+                return retornoErro
+            }else{
+                retornoErro.erroDescricao = "O segundo parâmetro precisa ser maior ou igual do que o primeiro"
+                return retornoErro
+            }    
+        }else
+            return retornoErro
+    }else
+        return retornoErro
+}
+/* PARÂMETROS */
+    // metodo - Método escolhido para requisição. 'GET' ou 'POST'
+    // url - endereço que irá realizar a requisição,
+    // data - Dados enviados em requisição 'POST'. Por padrão é null.
 function requisicao(metodo, url, data = null){
     let method = metodo.toUpperCase()
     //let response = null
@@ -109,13 +136,13 @@ function requisicao(metodo, url, data = null){
         
         xhr.onreadystatechange = () => {
             if(xhr.readyState == 4){
-                if(xhr.status == 200){ // tratar 404, 403 ?
+                if(xhr.status == 200){ 
                     console.log(xhr.responseText);
                     //response = JSON.parse(xhr.responseText)
                     //console.log('Qtde repositorios:'+ response.length);
-                }else{
-                    //console.log('Erro: ' + xhr.responseText);
                 }
+                if(xhr.status == 403)console.log(xhr.responseText);
+                if(xhr.status == 404)console.log(xhr.responseText);
             }
         }
         xhr.send(data);
