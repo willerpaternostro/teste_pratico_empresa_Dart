@@ -122,11 +122,10 @@ function validandoParametros(primeiro,segundo){
 }
 /* PARÂMETROS */
     // metodo - Método escolhido para requisição. 'GET' ou 'POST'
-    // url - endereço que irá realizar a requisição,
+    // url - endereço que receberá a requisição,
     // data - Dados enviados em requisição 'POST'. Por padrão é null.
 function requisicao(metodo, url, data = null){
     let method = metodo.toUpperCase()
-    //let response = null
 
     if(method == 'GET' || method == 'POST'){
         let xhr = new XMLHttpRequest();
@@ -138,7 +137,7 @@ function requisicao(metodo, url, data = null){
             if(xhr.readyState == 4){
                 if(xhr.status == 200){ 
                     console.log(xhr.responseText);
-                    //response = JSON.parse(xhr.responseText)
+                    //let response = JSON.parse(xhr.responseText)
                     //console.log('Qtde repositorios:'+ response.length);
                 }
                 if(xhr.status == 403)console.log(xhr.responseText);
